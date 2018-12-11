@@ -5,31 +5,36 @@ sudo vim ~/.bashrc
 #paste the line below
 export DISPLAY=:0
 
+
+For display:
+sudo vim /boot/config.txt
+=========================
+
+hdmi_cvt=1024 600 60 3 0 0 0
+hdmi_group=2
+hdmi_mode=87
+display_rotate=1
+
+
+
 Dependencies:
 Using Python 2.7
 
-Tkinter
-=======
-sudo apt-get install python-tk
 
 Pillow
 ==========
 sudo pip install pillow
 
-SpeechRecognition
-=================
-sudo pip install SpeechRecognition
-
-PyAudio
-=======
-sudo apt-get install python-pyaudio
-
 GoogleImagesDownload
 ====================
 sudo pip install googe_images_download
 
+Geeqie (Image Viewer)
+=====================
+sudo apt-get install geeqie
+
 Execution:
 
-python
+sudo python
 from fullscreen import fullscreen
 fullscreen('keyword')

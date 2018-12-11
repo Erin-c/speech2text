@@ -1,41 +1,22 @@
 from google_images_download import google_images_download
 
+import subprocess
+import time
 import sys
-if sys.version_info[0] == 2:  # the tkinter library changed it's name from Python 2 to 3.
-    import Tkinter
-    tkinter = Tkinter #I decided to use a library reference to avoid potential naming conflicts with people's programs.
-else:
-    import tkinter
-from PIL import Image, ImageTk
 
 import os, shutil
 if os.path.isdir("downloads"):
     shutil.rmtree('downloads')
 
-def showPIL(pilImage):
-    root = tkinter.Toplevel()
-    w, h = root.winfo_screenwidth(), root.winfo_screenheight()
-    root.overrideredirect(1)
-    root.geometry("%dx%d+0+0" % (w, h))
-    root.focus_set()    
-    root.bind("<Escape>", lambda e: (e.widget.withdraw(), e.widget.quit()))
-    canvas = tkinter.Canvas(root,width=w,height=h)
-    canvas.pack()
-    canvas.configure(background='black')
-    imgWidth, imgHeight = pilImage.size
-    if imgWidth > w or imgHeight > h:
-        ratio = min(w/imgWidth, h/imgHeight)
-        imgWidth = int(imgWidth*ratio)
-        imgHeight = int(imgHeight*ratio)
-        pilImage = pilImage.resize((imgWidth,imgHeight), Image.ANTIALIAS)
-    image = ImageTk.PhotoImage(pilImage)
-    imagesprite = canvas.create_image(w/2,h/2,image=image)
-    root.mainloop()
-
 def fullscreen(keyword):
     response = google_images_download.googleimagesdownload()
-    arguments = {"keywords":keyword, "limit":1, "format":"jpg", "size":"medium", "print_urls":True}
+    arguments = {"keywords":keyword, "limit":1, "format":"jpg", "size":"large", "aspect_ratio":"tall", "print_urls":True}
     image_path = response.download(arguments)
-    print(image_path[keyword][0])
-    pilImage = Image.open(image_path[keyword][0])
-    showPIL(pilImage)
+    try:
+        print(image_path[keyword][0])
+        sp = subprocess.Popen(["geeqie", "-f", image_path[keyword][0]])
+        time.sleep(3)
+        #Erin, you can change this to complete some other action before closing the window. You can also just keep the window open by removing the line below:
+        sp.terminate()
+    except IndexError:
+        print "No images found for that keyword query."
