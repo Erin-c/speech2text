@@ -1,6 +1,10 @@
 import subprocess
 subprocess.Popen(['jackd', '-d', 'alsa'])
 
+import multiprocessing
+
+from fullscreen import fullscreen
+
 from threading import Thread
 try:
     from queue import Queue  
@@ -15,14 +19,23 @@ audio_queue = Queue()
 sample_rate = 8000
 chunk_size = 1024 
 
+
 def recognize_worker():
     # this runs in a background thread
+    pic_thread = None
     while True:
         audio = audio_queue.get()
         if audio is None: break  
         try:
             # for testing purposes, we're just using the default API key
-            print(r.recognize_google(audio))
+            #print(r.recognize_google(audio))
+            #p = multiprocessing.Process(target=fullscreen,args=(r.recognize_google(audio),))
+            #p.start()
+            #if pic_thread is not None:
+            #    pic_thread.terminate()
+            
+            pic_thread = fullscreen(r.recognize_google(audio),pic_thread)
+
         except sr.UnknownValueError:
             print("Speech Recognition could not understand audio")
 

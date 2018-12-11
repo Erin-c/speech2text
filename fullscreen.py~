@@ -4,13 +4,14 @@ import subprocess
 import time
 import sys
 
-dict_lookup=['wearable', 'lamp', 'Christmas', 'happy', 'chicken', 'filter', 'car', 'chocolate', 'monkey', 'chalk', 'donkey', 'lip', 'Patrick', 'moose', 'baby', 'picture', 'book']
+dict_lookup=['wearable', 'monkey', 'chalk', 'donkey', 'lip', 'Patrick', 'moose', 'baby', 'picture', 'book']
+sp = None
 
 import os, shutil
 if os.path.isdir("downloads"):
     shutil.rmtree('downloads')
 
-def fullscreen(keywords,sp):
+def fullscreen(keywords):
     sep_keyword = keywords.split()
     for keyword in sep_keyword:
         if keyword in dict_lookup:
