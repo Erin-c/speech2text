@@ -1,10 +1,19 @@
+import subprocess
+subprocess.Popen(['jackd', '-d', 'alsa'])
+
 from threading import Thread
-from queue import Queue  
+try:
+    from queue import Queue  
+except ImportError:
+    from Queue import Queue
 
 import speech_recognition as sr
 
 r = sr.Recognizer()
 audio_queue = Queue()
+
+sample_rate = 8000
+chunk_size = 1024 
 
 def recognize_worker():
     # this runs in a background thread
@@ -24,7 +33,7 @@ def recognize_worker():
 recognize_thread = Thread(target=recognize_worker)
 recognize_thread.daemon = True
 recognize_thread.start()
-with sr.Microphone() as source:
+with sr.Microphone(sample_rate = sample_rate,chunk_size = chunk_size) as source:
     try:
         while True:  
             audio_queue.put_nowait(r.listen(source))
