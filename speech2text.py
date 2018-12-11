@@ -1,8 +1,5 @@
 from threading import Thread
-try:
-    from queue import Queue  # Python 3 import
-except ImportError:
-    from Queue import Queue  # Python 2 import
+from queue import Queue  
 
 import speech_recognition as sr
 
@@ -30,10 +27,10 @@ recognize_thread.start()
 with sr.Microphone() as source:
     try:
         while True:  
-            audio_queue.put(r.listen(source))
+            audio_queue.put_nowait(r.listen(source))
     except KeyboardInterrupt:  
         pass
 
-audio_queue.join()  # block until all current audio processing jobs are done
+# audio_queue.join()  # block until all current audio processing jobs are done
 audio_queue.put(None)  # tell the recognize_thread to stop
-recognize_thread.join()  # wait for the recognize_thread to actually stop
+# recognize_thread.join()  # wait for the recognize_thread to actually stop
